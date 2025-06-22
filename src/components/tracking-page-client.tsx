@@ -116,14 +116,14 @@ export function TrackingPageClient() {
   if (isLoading && !currentTrackingNumber) {
     // Show full page loader if loading initial search
     return (
-      <div className="flex justify-center items-center min-h-[calc(100vh-150px)]">
-        <Loader2 className="h-12 w-12 animate-spin text-main" />
+      <div className="min-h-screen bg-background text-foreground transition-colors flex justify-center items-center">
+        <Loader2 className="h-12 w-12 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="w-full">
+    <div className="min-h-screen bg-background text-foreground transition-colors">
       <AnimatePresence mode="wait">
         {!currentTrackingNumber || !data ? (
           <InitialTrackingView
@@ -137,7 +137,7 @@ export function TrackingPageClient() {
           />
         ) : (
           <Suspense
-            fallback={<Loader2 className="h-12 w-12 animate-spin text-main" />}
+            fallback={<Loader2 className="h-12 w-12 animate-spin" />}
           >
             <TrackingResultsView
               key="resultsView"

@@ -22,7 +22,7 @@ const statusIcons: { [key: string]: React.ReactNode } = {
 export function TrackingTimeline({ data }: { data: TrackingResponse["data"] }) {
   return (
     <div className="space-y-6">
-      <Card className="bg-white dark:bg-secondary">
+      <Card className="bg-white dark:bg-background dark:!border-gray-800">
         <CardHeader className="flex flex-row items-center justify-between pb-2">
           <div className="flex items-center gap-4">
             <div className="bg-main p-3 rounded-full">
@@ -98,7 +98,7 @@ function TimelineItem({
             <div className="w-4 h-4 bg-main rounded-full border-4 border-accent dark:border-dark z-10 ml-4" />
           </div>
         </div>
-        <Card className="w-full bg-white dark:bg-secondary ml-8">
+        <Card className="w-full bg-white dark:bg-background dark:!border-gray-800 ml-8">
           <CardContent className="p-4 flex justify-between items-start">
             <div>
               <p className="text-xs font-semibold text-gray-500 dark:text-gray-400">

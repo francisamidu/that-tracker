@@ -46,36 +46,41 @@ export function TrackingResultsView({
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2, duration: 0.5 }}
         >
-          <div className="mb-6">
-            <h2 className="text-lg font-semibold mb-2">Recent Searches</h2>
-            <ul className="space-y-2">
-              {recentSearches.map((search) => (
-                <li
-                  key={search.trackingNumber}
-                  className="flex items-center justify-between bg-main/10 dark:bg-secondary px-3 py-1.5 rounded-full text-sm"
-                >
-                  <span
-                    className={`truncate max-w-[150px] cursor-pointer ${
-                      search.trackingNumber === currentTrackingNumber
-                        ? "font-bold text-main dark:text-accent-secondary"
-                        : ""
-                    }`}
-                    onClick={() => onRecentSearchClick(search.trackingNumber)}
+          {/* Sidebar with recent searches */}
+          <aside className="w-full md:max-w-xs">
+            <div className="bg-card  text-card-foreground rounded-lg border border-border dark:!border-gray-800 p-4 mb-6">
+              <h2 className="text-lg font-semibold mb-2">Recent Searches</h2>
+              <ul className="space-y-2">
+                {recentSearches.map((search) => (
+                  <li
+                    key={search.trackingNumber}
+                    className="flex items-center justify-between bg-card text-card-foreground px-3 py-1.5 rounded-full text-sm border border-border hover:text-primary transition-colors  dark:!border-gray-700 cursor-pointer"
                   >
-                    {search.trackingNumber}
-                  </span>
-                  <button
-                    onClick={() => onRemoveRecentSearch(search.trackingNumber)}
-                    className="ml-2 text-gray-400 hover:text-red-500"
-                    aria-label={`Remove ${search.trackingNumber}`}
-                  >
-                    ×
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <TrackingSidebar trackingNumber={currentTrackingNumber} />
+                    <span
+                      className={`truncate max-w-[150px] ${
+                        search.trackingNumber === currentTrackingNumber
+                          ? "font-bold text-main dark:text-accent-secondary"
+                          : ""
+                      }`}
+                      onClick={() => onRecentSearchClick(search.trackingNumber)}
+                    >
+                      {search.trackingNumber}
+                    </span>
+                    <button
+                      onClick={() =>
+                        onRemoveRecentSearch(search.trackingNumber)
+                      }
+                      className="ml-2 text-gray-400 hover:text-red-500"
+                      aria-label={`Remove ${search.trackingNumber}`}
+                    >
+                      ×
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <TrackingSidebar trackingNumber={currentTrackingNumber} />
+          </aside>
         </motion.div>
         <motion.div
           className="lg:col-span-2"

@@ -45,7 +45,7 @@ export function InitialTrackingView({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.5 }}
-      className="min-h-[calc(100vh-150px)] flex flex-col items-center justify-center text-center p-4 bg-hero-pattern bg-white dark:bg-dark" // Adjusted min-height
+      className="min-h-[calc(100vh-150px)] flex flex-col items-center justify-center text-center p-4 bg-hero-pattern bg-white dark:bg-background" // Adjusted min-height
     >
       <div className="max-w-3xl w-full">
         <motion.h1
@@ -90,14 +90,14 @@ export function InitialTrackingView({
           <Input
             type="text"
             placeholder="Enter your tracking number (e.g., UA796544924AE)"
-            className="w-full p-6 text-lg bg-white dark:bg-gray-800 border-2 border-gray-300 dark:border-gray-700 focus:border-main dark:focus:border-accent-secondary focus:ring-main dark:focus:ring-accent-secondary rounded-4xl"
+            className="w-full p-6 text-lg bg-white dark:bg-gray-800 border-2 border-gray-300 dark:!border-gray-700 focus:border-main dark:focus:border-accent-secondary focus:ring-main dark:focus:ring-accent-secondary rounded-4xl"
             value={trackingNumberInput}
             onChange={(e) => setTrackingNumberInput(e.target.value)}
             aria-label="Tracking number input"
           />
           <Button
             type="submit"
-            className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-white py-1 px-2.5 text-lg absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full flex items-center"
+            className="w-full sm:w-auto bg-primary hover:bg-primary/80 text-white dark:bg-gray-700 dark:hover:bg-gray-600 py-1 px-2.5 text-lg absolute right-2 top-1/2 transform -translate-y-1/2 rounded-full flex items-center"
             aria-label="Track Package"
           >
             <ArrowRight className="h-5 w-5" />
@@ -151,14 +151,14 @@ export function InitialTrackingView({
             </motion.div>
 
             {/* Tracked Packages: styled to match provided image */}
-            <div className="mt-8">
+            <div className="mt-8 dark:bg-card text-card-foreground rounded-lg dark:shadow p-4">
               <h2 className="text-lg font-semibold mb-4 text-left">
                 Tracked Packages
               </h2>
               {recentSearches.map((search) => (
                 <div
                   key={search.trackingNumber}
-                  className="w-full rounded shadow-sm mb-4 cursor-pointer transition"
+                  className="w-full rounded-b-2xl rounded-t-md mb-4 cursor-pointer transition bg-card text-card-foreground border border-gray-50 dark:!border-gray-800"
                   onClick={() => onRecentSearchClick(search.trackingNumber)}
                   role="button"
                   tabIndex={0}
@@ -168,7 +168,7 @@ export function InitialTrackingView({
                   }
                 >
                   {/* Top row: tracking number (red, mail icon), carrier (bold, right) */}
-                  <div className="flex items-center justify-between px-4 py-2 bg-green-50 dark:bg-gray-800">
+                  <div className="flex items-center justify-between px-4 py-2 bg-green-50 dark:bg-green-900/20 border-b border-border dark:!border-gray-800">
                     <div className="flex items-center gap-2">
                       <span className="text-green-700">
                         <svg
@@ -188,12 +188,12 @@ export function InitialTrackingView({
                         {search.trackingNumber}
                       </span>
                     </div>
-                    <span className="font-semibold text-gray-700 capitalize">
+                    <span className="font-semibold text-gray-700 dark:text-gray-400 capitalize">
                       {search.carrier}
                     </span>
                   </div>
                   {/* Middle row: most recent event datetime, status */}
-                  <div className="grid grid-cols-[minmax(200px,1fr)_minmax(900px,1fr)_100px] place-items-start px-4 py-2 text-gray-800">
+                  <div className="grid grid-cols-[minmax(200px,1fr)_minmax(900px,1fr)_100px] place-items-start px-4 py-2 text-gray-800 dark:text-gray-400">
                     <span className="mr-6">
                       {formatDate(new Date().toLocaleString())}
                     </span>
@@ -202,7 +202,7 @@ export function InitialTrackingView({
                     </span>
                   </div>
                   {/* Bottom row: status category */}
-                  <div className="grid grid-cols-[minmax(200px,1fr)_minmax(900px,1fr)_100px] place-items-start px-4 pb-2  text-gray-600 text-sm">
+                  <div className="grid grid-cols-[minmax(200px,1fr)_minmax(900px,1fr)_100px] place-items-start px-4 pb-2  text-gray-600 dark:text-gray-400 text-sm">
                     <p>
                       Status:{" "}
                       <span className="font-semibold">
