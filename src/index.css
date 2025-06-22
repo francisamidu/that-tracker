@@ -164,13 +164,13 @@ h1, h2, h3, h4, h5, h6 {
   --card-foreground: oklch(0.129 0.042 264.695);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.129 0.042 264.695);
-  --primary: #197bbd;
+  --primary: #0d21a1;
   --primary-foreground: oklch(0.984 0.003 247.858);
-  --secondary: #125e8a;
+  --secondary: #011638;
   --secondary-foreground: oklch(0.208 0.042 265.755);
-  --muted: oklch(0.968 0.007 247.896);
+  --muted: #eef0f2;
   --muted-foreground: oklch(0.554 0.046 257.417);
-  --accent: oklch(0.968 0.007 247.896);
+  --accent: #eec643;
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
   --border: oklch(0.929 0.013 255.508);

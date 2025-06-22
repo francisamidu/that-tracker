@@ -1,101 +1,131 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { AnimatePresence } from "framer-motion"
-import toast from "react-hot-toast"
-import { InitialTrackingView } from "./initial-tracking-view"
-import { TrackingResultsView } from "./tracking-results-view"
-import { useRecentSearches } from "../hooks/use-recent-searches"
-import { Loader2 } from "lucide-react" // For loading spinner
-
-const fetchTrackingData = (trackingNumber: string): Promise<{ success: boolean; message?: string }> => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (trackingNumber === "ERROR123") {
-        reject(new Error("Simulated API error: Could not connect."))
-      } else if (trackingNumber.length < 5 || (!trackingNumber.startsWith("RR") && !trackingNumber.startsWith("UA"))) {
-        resolve({ success: false, message: "Invalid tracking number format." })
-      } else if (trackingNumber === "NODATA456") {
-        resolve({ success: false, message: "Tracking number not found." })
-      } else {
-        resolve({ success: true })
-      }
-    }, 1500)
-  })
-}
+import { useState, useEffect, Suspense } from "react";
+import { AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
+import { InitialTrackingView } from "./initial-tracking-view";
+import { TrackingResultsView } from "./tracking-results-view";
+import { useRecentSearches, RecentSearch } from "../hooks/use-recent-searches";
+import { Loader2 } from "lucide-react"; // For loading spinner
+import { useQuery } from "@tanstack/react-query";
+import { getTrackingData } from "../api/api";
+import { APIResponse } from "../types/api";
+import { TrackingResponse } from "../types/tracking-response.types";
+import { useLocalStorage } from "../hooks/use-localstorage";
 
 export function TrackingPageClient() {
-  const [trackingNumberInput, setTrackingNumberInput] = useState("")
-  const [currentTrackingNumber, setCurrentTrackingNumber] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [recentSearches, addRecentSearch, removeRecentSearch] = useRecentSearches()
-  const [pageLoaded, setPageLoaded] = useState(false)
+  const [trackingNumberInput, setTrackingNumberInput] = useState("");
+  const [currentTrackingNumber, setCurrentTrackingNumber] =
+    useLocalStorage<string>("trackingNumber", "");
+  const [isLoading, setIsLoading] = useState(false);
+  const [recentSearches, addRecentSearch, removeRecentSearch] =
+    useRecentSearches();
 
-  useEffect(() => {
-    const timer = setTimeout(() => setPageLoaded(true), 200)
-    return () => clearTimeout(timer)
-  }, [])
+  function addTrackingNumber(newNumber: string) {
+    if (!currentTrackingNumber || currentTrackingNumber !== newNumber) {
+      setCurrentTrackingNumber(newNumber);
+    }
+  }
 
-  const handleTrackPackage = async (tnToTrack?: string) => {
-    const effectiveTrackingNumber = tnToTrack || trackingNumberInput
+  const {
+    data,
+    isLoading: isTrackingLoading,
+    error,
+  } = useQuery<{}, Error, TrackingResponse>({
+    queryKey: ["tracking", currentTrackingNumber],
+    queryFn: () => getTrackingData(currentTrackingNumber!),
+    enabled: !!currentTrackingNumber,
+    retry: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchInterval: false,
+  });
+
+  // All hooks must be called before any conditional return!
+  // (already at the top, just making it explicit)
+
+  // Removed pageLoaded effect
+
+  // Handler functions declared after hooks
+  const handleTrackPackage = (tnToTrack?: string) => {
+    const effectiveTrackingNumber = tnToTrack || trackingNumberInput;
+
     if (!effectiveTrackingNumber.trim()) {
-      toast.error("Please enter a tracking number.")
-      return
+      toast.error("Please enter a tracking number.");
+      return;
     }
-    setIsLoading(true)
-    const loadingToastId = toast.loading(`Tracking ${effectiveTrackingNumber}...`)
+    addTrackingNumber(effectiveTrackingNumber);
+    setIsLoading(true);
 
-    try {
-      const result = await fetchTrackingData(effectiveTrackingNumber)
-      if (result.success) {
-        setCurrentTrackingNumber(effectiveTrackingNumber)
-        addRecentSearch(effectiveTrackingNumber)
-        if (tnToTrack) setTrackingNumberInput(tnToTrack) // Update input if tracked via recent
-        toast.success(`Tracking information loaded for ${effectiveTrackingNumber}!`, { id: loadingToastId })
-      } else {
-        setCurrentTrackingNumber(null)
-        toast.error(result.message || "Could not find tracking information.", { id: loadingToastId })
+    // We'll add to recentSearches only after successful fetch
+    // The useQuery hook will update data, so useEffect will handle it
+    if (error) {
+      setCurrentTrackingNumber("");
+      toast.error("Error fetching tracking data: " + error.message);
+      setIsLoading(false);
+    }
+  };
+
+  const handleRecentSearchClick = (trackingNumber: string) => {
+    setTrackingNumberInput(trackingNumber); // Populate input
+    handleTrackPackage(trackingNumber); // Immediately track
+    setCurrentTrackingNumber(trackingNumber);
+  };
+
+  const handleRemoveRecentSearch = (trackingNumber: string) => {
+    removeRecentSearch(trackingNumber);
+    toast.success(`Removed "${trackingNumber}" from recent searches.`, {
+      duration: 2000,
+    });
+  };
+
+  // Add to recentSearches only after successful fetch
+  // Use an effect to watch for new successful data
+  useEffect(() => {
+    if (data && currentTrackingNumber) {
+      // Extract recent search data from API response
+      const tracking = data?.data?.trackings?.[0];
+      if (tracking) {
+        const mostRecentEvent =
+          tracking.events && tracking.events.length > 0
+            ? tracking.events[0]
+            : { status: "", occurrenceDatetime: "" };
+        const recent: RecentSearch = {
+          trackingNumber: tracking.tracker.trackingNumber,
+          carrier: tracking.events?.[0].courierCode || "",
+          statusCategory: tracking.shipment.statusCategory || "",
+          event: {
+            status: mostRecentEvent.status,
+            occurrenceDatetime: mostRecentEvent.occurrenceDatetime,
+          },
+        };
+        addRecentSearch(recent);
       }
-    } catch (error) {
-      setCurrentTrackingNumber(null)
-      toast.error(error instanceof Error ? error.message : "An unexpected error occurred.", { id: loadingToastId })
-    } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  }, [data, currentTrackingNumber, addRecentSearch]);
 
-  const handleRecentSearchClick = (searchTerm: string) => {
-    setTrackingNumberInput(searchTerm) // Populate input
-    handleTrackPackage(searchTerm) // Immediately track
-  }
+  // Handler for going back to main view
+  const handleBackToMain = () => {
+    setCurrentTrackingNumber("");
+    setTrackingNumberInput("");
+  };
 
-  const handleRemoveRecentSearch = (searchTerm: string) => {
-    removeRecentSearch(searchTerm)
-    toast.success(`Removed "${searchTerm}" from recent searches.`, { duration: 2000 })
-  }
-
-  if (!pageLoaded && !isLoading) {
-    // Show loading only if page not loaded AND not already loading data
-    return (
-      <div className="flex justify-center items-center min-h-[calc(100vh-150px)]">
-        <Loader2 className="h-12 w-12 animate-spin text-main" />
-      </div>
-    )
-  }
-
+  // Only perform conditional returns after all hooks and handlers
   if (isLoading && !currentTrackingNumber) {
     // Show full page loader if loading initial search
     return (
       <div className="flex justify-center items-center min-h-[calc(100vh-150px)]">
         <Loader2 className="h-12 w-12 animate-spin text-main" />
       </div>
-    )
+    );
   }
 
   return (
     <div className="w-full">
       <AnimatePresence mode="wait">
-        {!currentTrackingNumber ? (
+        {!currentTrackingNumber || !data ? (
           <InitialTrackingView
             key="initialView"
             trackingNumberInput={trackingNumberInput}
@@ -106,9 +136,21 @@ export function TrackingPageClient() {
             onRemoveRecentSearch={handleRemoveRecentSearch}
           />
         ) : (
-          <TrackingResultsView key="resultsView" currentTrackingNumber={currentTrackingNumber} />
+          <Suspense
+            fallback={<Loader2 className="h-12 w-12 animate-spin text-main" />}
+          >
+            <TrackingResultsView
+              key="resultsView"
+              currentTrackingNumber={currentTrackingNumber!}
+              data={data?.data!}
+              recentSearches={recentSearches}
+              onRecentSearchClick={handleRecentSearchClick}
+              onRemoveRecentSearch={handleRemoveRecentSearch}
+              onBack={handleBackToMain}
+            />
+          </Suspense>
         )}
       </AnimatePresence>
     </div>
-  )
+  );
 }

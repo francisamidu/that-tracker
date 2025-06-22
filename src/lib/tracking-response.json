@@ -1,0 +1,90 @@
+{
+  "data": {
+    "trackings": [
+      {
+        "tracker": {
+          "trackerId": "c15f4a77-5745-41ec-a73c-8bd9e1de04dd",
+          "trackingNumber": "UV747144369UZ",
+          "shipmentReference": null,
+          "courierCode": [],
+          "clientTrackerId": null,
+          "isSubscribed": true,
+          "isTracked": true,
+          "createdAt": "2025-06-20T20:52:19.924Z"
+        },
+        "shipment": {
+          "shipmentId": "db3dcc1c-3fbb-4f70-9cd2-500a7c93d500",
+          "statusCode": null,
+          "statusCategory": "transit",
+          "statusMilestone": "in_transit",
+          "originCountryCode": "UZ",
+          "destinationCountryCode": "MW",
+          "delivery": {
+            "estimatedDeliveryDate": null,
+            "service": null,
+            "signedBy": null
+          },
+          "trackingNumbers": [
+            {
+              "tn": "UV747144369UZ"
+            }
+          ],
+          "recipient": {
+            "name": null,
+            "address": null,
+            "postCode": null,
+            "city": null,
+            "subdivision": null
+          }
+        },
+        "events": [
+          {
+            "eventId": "1b670413-a25b-40a5-b2a4-f625bc65f73f",
+            "trackingNumber": "UV747144369UZ",
+            "eventTrackingNumber": "UV747144369UZ",
+            "status": "Arrival at delivery office",
+            "occurrenceDatetime": "2025-06-18T15:25:00",
+            "order": null,
+            "datetime": "2025-06-18T15:25:00.000Z",
+            "hasNoTime": false,
+            "utcOffset": null,
+            "location": "MWLIMB",
+            "sourceCode": "upu-tracking",
+            "courierCode": "upu",
+            "statusCode": null,
+            "statusCategory": "transit",
+            "statusMilestone": "in_transit"
+          },
+          {
+            "eventId": "ffbc0c73-101b-434a-b1f4-3ff22306f5ed",
+            "trackingNumber": "UV747144369UZ",
+            "eventTrackingNumber": "UV747144369UZ",
+            "status": "Arrival at inward office of exchange",
+            "occurrenceDatetime": "2025-06-11T11:34:00",
+            "order": null,
+            "datetime": "2025-06-11T11:34:00.000Z",
+            "hasNoTime": false,
+            "utcOffset": null,
+            "location": "MWLLWB",
+            "sourceCode": "upu-tracking",
+            "courierCode": "upu",
+            "statusCode": null,
+            "statusCategory": null,
+            "statusMilestone": "in_transit"
+          }
+        ],
+        "statistics": {
+          "timestamps": {
+            "infoReceivedDatetime": "2025-06-11T11:34:00",
+            "inTransitDatetime": "2025-06-11T11:34:00",
+            "outForDeliveryDatetime": null,
+            "failedAttemptDatetime": null,
+            "availableForPickupDatetime": null,
+            "exceptionDatetime": null,
+            "deliveredDatetime": null
+          }
+        }
+      }
+    ]
+  }
+}
