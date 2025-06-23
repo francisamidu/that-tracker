@@ -84,12 +84,13 @@ export function TrackingPageClient() {
   useEffect(() => {
     if (data && currentTrackingNumber) {
       // Extract recent search data from API response
+      console.log(data);
       const tracking = data?.data?.trackings?.[0];
       if (tracking) {
         const mostRecentEvent =
-          tracking.events && tracking.events.length > 0
+          tracking.events && tracking.events?.length > 0
             ? tracking.events[0]
-            : { status: "", occurrenceDatetime: "" };
+            : { status: "In Transit", occurrenceDatetime: "" };
         const recent: RecentSearch = {
           trackingNumber: tracking.tracker.trackingNumber,
           carrier: tracking.events?.[0].courierCode || "",

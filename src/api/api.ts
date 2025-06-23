@@ -1,11 +1,19 @@
 import ky from "ky";
 
 const api = ky.create({
-  prefixUrl: "https://that-tracker-backend.onrender.com",
+  // prefixUrl: "https://that-tracker-backend.onrender.com/api",
+  prefixUrl: "http://localhost:3001/api",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json",
+  },
 });
 
 const getTrackingData = async (trackingNumber: string) => {
-  const response = await api.get(`track?tracking_number=${trackingNumber}`);
+  console.log(trackingNumber);
+  const response = await api.post("track", {
+    body: JSON.stringify({ trackingNumber }),
+  });
   return response.json();
 };
 
