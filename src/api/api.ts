@@ -1,8 +1,8 @@
 import ky from "ky";
 
 const api = ky.create({
-  // prefixUrl: "https://that-tracker-backend.onrender.com/api",
-  prefixUrl: "http://localhost:3001/api",
+  prefixUrl: "https://that-tracker-backend.onrender.com/api",
+  // prefixUrl: "http://localhost:3001/api",
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json",
