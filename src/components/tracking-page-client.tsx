@@ -128,6 +128,7 @@ export function TrackingPageClient() {
         {!currentTrackingNumber || !data ? (
           <InitialTrackingView
             key="initialView"
+            loading={typeof recentSearches === "undefined"}
             trackingNumberInput={trackingNumberInput}
             setTrackingNumberInput={setTrackingNumberInput}
             handleTrackPackage={() => handleTrackPackage()}
@@ -136,9 +137,7 @@ export function TrackingPageClient() {
             onRemoveRecentSearch={handleRemoveRecentSearch}
           />
         ) : (
-          <Suspense
-            fallback={<Loader2 className="h-12 w-12 animate-spin" />}
-          >
+          <Suspense fallback={<Loader2 className="h-12 w-12 animate-spin" />}>
             <TrackingResultsView
               key="resultsView"
               currentTrackingNumber={currentTrackingNumber!}

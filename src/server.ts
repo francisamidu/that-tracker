@@ -54,6 +54,16 @@ app.get("/api/track", async (req, res) => {
   }
 });
 
+app.post("/api/webhook", async (req, res) => {
+  console.dir(
+    {
+      message: "Webhook received:",
+      body: req.body,
+    },
+    { depth: Infinity }
+  );
+});
+
 app.listen(PORT, () => {
   console.log(`Backend server running on port ${PORT}`);
 });
