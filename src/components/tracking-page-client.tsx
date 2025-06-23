@@ -9,7 +9,6 @@ import { useRecentSearches, RecentSearch } from "../hooks/use-recent-searches";
 import { Loader2 } from "lucide-react"; // For loading spinner
 import { useQuery } from "@tanstack/react-query";
 import { getTrackingData } from "../api/api";
-import { APIResponse } from "../types/api";
 import { TrackingResponse } from "../types/tracking-response.types";
 import { useLocalStorage } from "../hooks/use-localstorage";
 
