@@ -110,128 +110,135 @@ export function InitialTrackingView({
       <div className="max-w-3xl w-full">
         {loading ? (
           <SkeletonTrackedPackages count={3} />
-        ) : (
-          recentSearches.length > 0 && (
-            <>
-              <motion.div
-                className="mt-6 flex flex-wrap justify-center items-center gap-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.8, duration: 0.5 }}
-              >
-                <p className="text-sm text-gray-500 dark:text-gray-400 w-full mb-1 sm:w-auto sm:mb-0 sm:mr-2">
-                  Recent:
-                </p>
-                {recentSearches.map((search) => (
-                  <motion.div
-                    key={search.trackingNumber}
-                    initial={{ opacity: 0, scale: 0.5 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex items-center bg-main/10 dark:bg-secondary text-main dark:text-accent-secondary px-3 py-1.5 rounded-full text-sm cursor-pointer hover:bg-main/20 dark:hover:bg-secondary/80"
-                    onClick={() => onRecentSearchClick(search.trackingNumber)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyPress={(e) =>
-                      e.key === "Enter" &&
-                      onRecentSearchClick(search.trackingNumber)
-                    }
+        ) : recentSearches.length > 0 ? (
+          <>
+            <motion.div
+              className="mt-6 flex flex-wrap justify-center items-center gap-2"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 0.5 }}
+            >
+              <p className="text-sm text-gray-500 dark:text-gray-400 w-full mb-1 sm:w-auto sm:mb-0 sm:mr-2">
+                Recent:
+              </p>
+              {recentSearches.map((search) => (
+                <motion.div
+                  key={search.trackingNumber}
+                  initial={{ opacity: 0, scale: 0.5 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="flex items-center bg-main/10 dark:bg-secondary text-main dark:text-accent-secondary px-3 py-1.5 rounded-full text-sm cursor-pointer hover:bg-main/20 dark:hover:bg-secondary/80"
+                  onClick={() => onRecentSearchClick(search.trackingNumber)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) =>
+                    e.key === "Enter" &&
+                    onRecentSearchClick(search.trackingNumber)
+                  }
+                >
+                  <Tag className="h-3 w-3 mr-1.5 flex-shrink-0" />
+                  <span className="mr-1.5 truncate max-w-[150px] sm:max-w-[200px]">
+                    {search.trackingNumber}
+                  </span>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-5 w-5 p-0.5 rounded-full hover:bg-main/30 dark:hover:bg-accent-secondary/30 flex-shrink-0"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemoveRecentSearch(search.trackingNumber);
+                    }}
+                    aria-label={`Remove ${search.trackingNumber} from recent searches`}
                   >
-                    <Tag className="h-3 w-3 mr-1.5 flex-shrink-0" />
-                    <span className="mr-1.5 truncate max-w-[150px] sm:max-w-[200px]">
-                      {search.trackingNumber}
-                    </span>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-5 w-5 p-0.5 rounded-full hover:bg-main/30 dark:hover:bg-accent-secondary/30 flex-shrink-0"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRemoveRecentSearch(search.trackingNumber);
-                      }}
-                      aria-label={`Remove ${search.trackingNumber} from recent searches`}
-                    >
-                      <X className="h-3 w-3" />
-                    </Button>
-                  </motion.div>
-                ))}
-              </motion.div>
+                    <X className="h-3 w-3" />
+                  </Button>
+                </motion.div>
+              ))}
+            </motion.div>
 
-              {/* Tracked Packages: styled to match provided image */}
-              <div className="mt-8 dark:bg-card text-card-foreground rounded-lg dark:shadow p-4">
-                <h2 className="text-lg font-semibold mb-4 text-left">
-                  Tracked Packages
-                </h2>
-                {recentSearches.map((search) => (
-                  <div
-                    key={search.trackingNumber}
-                    className="w-full rounded-b-2xl rounded-t-md mb-4 cursor-pointer transition bg-card text-card-foreground border border-gray-50 dark:!border-gray-800"
-                    onClick={() => onRecentSearchClick(search.trackingNumber)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyPress={(e) =>
-                      e.key === "Enter" &&
-                      onRecentSearchClick(search.trackingNumber)
-                    }
-                  >
-                    {/* Top row: tracking number (red, mail icon), carrier (bold, right) */}
-                    <div className="flex items-center justify-between px-4 py-2 bg-green-50 dark:bg-green-900/20 border-b border-border dark:!border-gray-800">
-                      <div className="flex items-center gap-2">
-                        <span className="text-green-700">
-                          <svg
-                            width="18"
-                            height="18"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            viewBox="0 0 24 24"
-                            className="inline mr-1 text-green-700"
-                          >
-                            <rect x="3" y="5" width="18" height="14" rx="2" />
-                            <polyline points="3 7 12 13 21 7" />
-                          </svg>
-                        </span>
-                        <span className="text-green-700 font-mono font-semibold text-base">
-                          {search.trackingNumber}
-                        </span>
-                      </div>
-                      <span className="font-semibold text-gray-700 dark:text-gray-400 capitalize">
-                        {search.carrier}
+            {/* Tracked Packages: styled to match provided image */}
+            <div className="mt-8 dark:bg-card text-card-foreground rounded-lg dark:shadow p-4">
+              <h2 className="text-lg font-semibold mb-4 text-left">
+                Tracked Packages
+              </h2>
+              {recentSearches.map((search) => (
+                <div
+                  key={search.trackingNumber}
+                  className="w-full rounded-b-2xl rounded-t-md mb-4 cursor-pointer transition bg-card text-card-foreground border border-gray-50 dark:!border-gray-800"
+                  onClick={() => onRecentSearchClick(search.trackingNumber)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyPress={(e) =>
+                    e.key === "Enter" &&
+                    onRecentSearchClick(search.trackingNumber)
+                  }
+                >
+                  {/* Top row: tracking number (red, mail icon), carrier (bold, right) */}
+                  <div className="flex items-center justify-between px-4 py-2 bg-green-50 dark:bg-green-900/20 border-b border-border dark:!border-gray-800">
+                    <div className="flex items-center gap-2">
+                      <span className="text-green-700">
+                        <svg
+                          width="18"
+                          height="18"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          viewBox="0 0 24 24"
+                          className="inline mr-1 text-green-700"
+                        >
+                          <rect x="3" y="5" width="18" height="14" rx="2" />
+                          <polyline points="3 7 12 13 21 7" />
+                        </svg>
+                      </span>
+                      <span className="text-green-700 font-mono font-semibold text-base">
+                        {search.trackingNumber}
                       </span>
                     </div>
-                    {/* Middle row: most recent event datetime, status */}
-                    <div className="grid grid-cols-[minmax(200px,1fr)_minmax(900px,1fr)_100px] place-items-start px-4 py-2 text-gray-800 dark:text-gray-400">
-                      <span className="mr-6">
-                        {formatDate(new Date().toLocaleString())}
-                      </span>
-                      <span className="mr-6 capitalize">
-                        {search.event.status}
-                      </span>
-                    </div>
-                    {/* Bottom row: status category */}
-                    <div className="grid grid-cols-[minmax(200px,1fr)_minmax(900px,1fr)_100px] place-items-start px-4 pb-2  text-gray-600 dark:text-gray-400 text-sm">
-                      <p>
-                        Status:{" "}
-                        <span className="font-semibold">
-                          {search.statusCategory}
-                        </span>
-                      </p>
-                      <p className="mr-6">
-                        Last updated:
-                        <span className="font-semibold">
-                          {formatDate(
-                            new Date(
-                              search.event.occurrenceDatetime
-                            ).toLocaleString()
-                          )}
-                        </span>
-                      </p>
-                    </div>
+                    <span className="font-semibold text-gray-700 dark:text-gray-400 capitalize">
+                      {search.carrier}
+                    </span>
                   </div>
-                ))}
-              </div>
-            </>
-          )
+                  {/* Middle row: most recent event datetime, status */}
+                  <div className="grid grid-cols-[minmax(200px,1fr)_minmax(900px,1fr)_100px] place-items-start px-4 py-2 text-gray-800 dark:text-gray-400">
+                    <span className="mr-6">
+                      {formatDate(new Date().toLocaleString())}
+                    </span>
+                    <span className="mr-6 capitalize">
+                      {search.event.status}
+                    </span>
+                  </div>
+                  {/* Bottom row: status category */}
+                  <div className="grid grid-cols-[minmax(200px,1fr)_minmax(900px,1fr)_100px] place-items-start px-4 pb-2  text-gray-600 dark:text-gray-400 text-sm">
+                    <p>
+                      Status:{" "}
+                      <span className="font-semibold">
+                        {search.statusCategory}
+                      </span>
+                    </p>
+                    <p className="mr-6">
+                      Last updated:
+                      <span className="font-semibold">
+                        {formatDate(
+                          new Date(
+                            search.event.occurrenceDatetime
+                          ).toLocaleString()
+                        )}
+                      </span>
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <motion.p
+            className="text-gray-500 dark:text-gray-400 text-sm mt-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.8, duration: 0.5 }}
+          >
+            No recent searches found. Start tracking your packages now!
+          </motion.p>
         )}
       </div>
     </motion.div>

@@ -1,11 +1,11 @@
 import ky from "ky";
 
 const api = ky.create({
-  prefixUrl: "https://jvjdyvelpzuxzcfcinpp.supabase.co/functions/v1/express",
+  prefixUrl: import.meta.env.VITE_APP_BACKEND_URL,
   // prefixUrl: "http://localhost:3001/api",
   headers: {
     Accept: "application/json",
-    Authorization: `Bearer ${process.env.REACT_APP_API_KEY}`,
+    Authorization: `Bearer ${import.meta.env.VITE_APP_API_KEY}`,
     "Content-Type": "application/json",
   },
 });
