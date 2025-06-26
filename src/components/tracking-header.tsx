@@ -1,5 +1,3 @@
-"use client";
-
 import { Link } from "@tanstack/react-router";
 import { Package, Globe, Code, Moon, Sun } from "lucide-react";
 import { Button } from "./ui/button"; // Assuming shadcn UI is available at src/components/ui

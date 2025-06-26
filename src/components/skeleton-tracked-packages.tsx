@@ -3,10 +3,14 @@ import React from "react";
 /**
  * Animated skeleton loader for tracked packages (recent searches)
  */
-export default function SkeletonTrackedPackages({ count = 3 }: { count?: number }) {
+export default function SkeletonTrackedPackages({
+  count = 3,
+}: {
+  count?: number;
+}) {
   return (
     <div className="mt-8 dark:bg-card text-card-foreground rounded-lg dark:shadow p-4 animate-pulse">
-      <h2 className="text-lg font-semibold mb-4 text-left bg-gray-200 dark:bg-gray-800 rounded w-40 h-6 mb-6"></h2>
+      <h2 className="text-lg font-semibold mb-6 text-left bg-gray-200 dark:bg-gray-800 rounded w-40 h-6"></h2>
       {Array.from({ length: count }).map((_, idx) => (
         <div
           key={idx}

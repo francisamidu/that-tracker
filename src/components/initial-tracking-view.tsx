@@ -1,9 +1,7 @@
-"use client";
-
-import { Input } from "./ui/input"; // Assuming shadcn UI is available at src/components/ui
-import { Button } from "./ui/button"; // Assuming shadcn UI is available at src/components/ui
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
 import { motion } from "framer-motion";
-import { Search, X, Tag, ArrowRight } from "lucide-react";
+import { X, Tag, ArrowRight } from "lucide-react";
 import { RecentSearch } from "../hooks/use-recent-searches";
 import { formatDate } from "../lib/formatDate";
 import SkeletonTrackedPackages from "./skeleton-tracked-packages";
@@ -15,7 +13,7 @@ type InitialTrackingViewProps = {
   recentSearches: RecentSearch[];
   onRecentSearchClick: (searchTerm: string) => void;
   onRemoveRecentSearch: (searchTerm: string) => void;
-  loading?: boolean; // <-- Added loading prop
+  loading?: boolean;
 };
 
 const couriers = [

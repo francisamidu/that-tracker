@@ -84,23 +84,27 @@ export function TrackingPageClient() {
   useEffect(() => {
     if (data && currentTrackingNumber) {
       // Extract recent search data from API response
-      console.log(data);
       const tracking = data?.data?.trackings?.[0];
-      if (tracking) {
-        const mostRecentEvent =
-          tracking.events && tracking.events?.length > 0
-            ? tracking.events[0]
-            : { status: "In Transit", occurrenceDatetime: "" };
-        const recent: RecentSearch = {
-          trackingNumber: tracking.tracker.trackingNumber,
-          carrier: tracking.events?.[0].courierCode || "",
-          statusCategory: tracking.shipment.statusCategory || "",
-          event: {
-            status: mostRecentEvent.status,
-            occurrenceDatetime: mostRecentEvent.occurrenceDatetime,
-          },
-        };
-        addRecentSearch(recent);
+      try {
+        if (tracking) {
+          const mostRecentEvent =
+            tracking.events && tracking.events?.length > 0
+              ? tracking.events[0]
+              : { status: "In Transit", occurrenceDatetime: "" };
+          const recent: RecentSearch = {
+            trackingNumber: tracking.tracker.trackingNumber,
+            carrier: tracking.events?.[0]?.courierCode || "",
+            statusCategory: tracking.shipment.statusCategory || "",
+            event: {
+              status: mostRecentEvent.status,
+              occurrenceDatetime: mostRecentEvent.occurrenceDatetime,
+            },
+          };
+          addRecentSearch(recent);
+        }
+      } catch (error) {
+        console.log(error);
+        toast.error("Error fetching tracking data: Try again later");
       }
       setIsLoading(false);
     }
@@ -125,7 +129,11 @@ export function TrackingPageClient() {
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors">
       <AnimatePresence mode="wait">
-        {!currentTrackingNumber || !data ? (
+        {!currentTrackingNumber ||
+        !data ||
+        !data.data ||
+        !data.data.trackings ||
+        !data.data.trackings[0] ? (
           <InitialTrackingView
             key="initialView"
             loading={typeof recentSearches === "undefined"}

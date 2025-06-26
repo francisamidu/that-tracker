@@ -1,10 +1,8 @@
-"use client";
-
 import type React from "react";
-import { Card, CardContent, CardHeader } from "./ui/card"; // Assuming shadcn UI is available at src/components/ui
-import { Progress } from "./ui/progress"; // Assuming shadcn UI is available at src/components/ui
+import { Card, CardContent, CardHeader } from "./ui/card";
+import { Progress } from "./ui/progress";
 import { MoreHorizontal, PackageCheck, Truck, Ship, Plane } from "lucide-react";
-import { Button } from "./ui/button"; // Assuming shadcn UI is available at src/components/ui
+import { Button } from "./ui/button";
 import { motion } from "framer-motion";
 import { formatDate } from "../lib/formatDate";
 import {
@@ -34,7 +32,9 @@ export function TrackingTimeline({ data }: { data: TrackingResponse["data"] }) {
               </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400">
                 The last update was received on{" "}
-                {formatDate(data.trackings[0].events[0].datetime)}
+                {data?.trackings[0]?.events[0]?.datetime
+                  ? formatDate(data.trackings[0].events[0].datetime)
+                  : "No tracking data available"}
               </p>
             </div>
           </div>
@@ -79,6 +79,7 @@ function TimelineItem({
   isLast: boolean;
   index: number;
 }) {
+  console.log(event);
   return (
     <motion.div
       className="relative pb-8"

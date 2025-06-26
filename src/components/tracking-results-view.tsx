@@ -79,7 +79,6 @@ export function TrackingResultsView({
                 ))}
               </ul>
             </div>
-            <TrackingSidebar trackingNumber={currentTrackingNumber} />
           </aside>
         </motion.div>
         <motion.div
